@@ -879,8 +879,18 @@ def stage_3_analysis(mh, cfg, tbuf, is_embedded, fixed, valid_code):
                         offset = bracket_stack[-1].location.col_start - \
                             statement_start_token.location.col_start
 
-                    if token.kind not in ("KET", "M_KET", "C_KET"):
-                        offset += 1
+                    if False: # old mode
+                        if token.kind not in ("KET", "M_KET", "C_KET"):
+                            offset += 1
+                    else:
+                        offset = 0
+
+                        num_relevant_brackets = len([bra for bra in bracket_stack if bra.kind in relevant_brackets])
+                        if token.kind in ("KET", "M_KET", "C_KET"):
+                            num_relevant_brackets -= 1
+
+                        offset += cfg.style_config["tab_width"] * num_relevant_brackets
+
 
                 else:
                     # This is a continued line. We try to preserve
