@@ -1151,13 +1151,17 @@ class MH_Style(command_line.MISS_HIT_Back_End):
 
         # Stage 3 - rules around individual tokens
 
-        stage_3_analysis(
-            mh          = wp.mh,
-            cfg         = wp.cfg,
-            tbuf        = tbuf,
-            is_embedded = isinstance(wp, work_package.Embedded_MATLAB_WP),
-            fixed       = parse_tree is not None,
-            valid_code  = parse_tree is not None)
+        try:
+            stage_3_analysis(
+                mh          = wp.mh,
+                cfg         = wp.cfg,
+                tbuf        = tbuf,
+                is_embedded = isinstance(wp, work_package.Embedded_MATLAB_WP),
+                fixed       = parse_tree is not None,
+                valid_code  = parse_tree is not None)
+        except IndexError:
+            print(f"Failed parsing: {wp.filename=}")
+            raise
 
         # Stage 4 - rules involving the parse tree
 
